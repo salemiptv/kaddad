@@ -1,0 +1,26 @@
+runtime: nodejs18 # تأكد من تحديد الإصدار الصحيح
+env: standard
+
+handlers:
+  - url: /.*
+    script: auto
+
+# إعداد المتغيرات البيئية
+env_variables:
+  NODE_ENV: 'production'
+  FIREBASE_PROJECT_ID: '1:941546196207:web:5c4c44513c3eedf1eedf1a' # استبدل بمعرف مشروع Firebase الخاص بك
+  FIREBASE_PRIVATE_KEY: '-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY\n-----END PRIVATE KEY-----\n' # استخدم المفتاح الخاص
+  FIREBASE_CLIENT_EMAIL: 'firebase-adminsdk@your-firebase-project-id.iam.gserviceaccount.com' # استبدل بعنوان البريد الإلكتروني للعميل الخاص بك
+  # أضف المزيد من المتغيرات حسب الحاجة
+
+# إعدادات خدمة جوجل
+automatic_scaling:
+  min_instances: 1
+  max_instances: 5
+
+# إعدادات التخزين
+instance_class: F2 # يمكنك تغيير الحجم حسب احتياجاتك
+
+# إعدادات الشبكة (اختياري)
+network:
+  session_affinity: true

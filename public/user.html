@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحة المستخدم</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>مرحباً بك!</h1>
+        <p id="user-greeting">هذه صفحة المستخدم</p>
+    </header>
+
+    <div class="container">
+        <h2>إضافة رحلة جديدة</h2>
+        <form id="offer-trip-form">
+            <!-- هنا تم إدراج النموذج كما هو -->
+            <label for="departure-location">مكان الانطلاق:</label>
+            <select id="departure-location" required>
+                <option value="">اختر مدينة</option>
+                <option value="عمان">عمان</option>
+                <option value="الزرقاء">الزرقاء</option>
+                <option value="إربد">إربد</option>
+                <option value="المفرق">المفرق</option>
+                <option value="جرش">جرش</option>
+                <option value="عجلون">عجلون</option>
+                <option value="السلط">السلط</option>
+                <option value="الكرك">الكرك</option>
+                <option value="مادبا">مادبا</option>
+                <option value="معان">معان</option>
+                <option value="العقبة">العقبة</option>
+                <option value="الطفيلة">الطفيلة</option>
+            </select>
+
+            <label for="departure-points">نقاط الانطلاق:</label>
+            <select id="departure-points" required>
+                <option value="">اختر نقطة انطلاق</option>
+            </select>
+
+            <label for="arrival-location">مكان الوصول:</label>
+            <select id="arrival-location" required>
+                <option value="">اختر مدينة</option>
+                <option value="عمان">عمان</option>
+                <option value="الزرقاء">الزرقاء</option>
+                <option value="إربد">إربد</option>
+                <option value="المفرق">المفرق</option>
+                <option value="جرش">جرش</option>
+                <option value="عجلون">عجلون</option>
+                <option value="السلط">السلط</option>
+                <option value="الكرك">الكرك</option>
+                <option value="مادبا">مادبا</option>
+                <option value="معان">معان</option>
+                <option value="العقبة">العقبة</option>
+                <option value="الطفيلة">الطفيلة</option>
+            </select>
+
+            <label for="arrival-points">نقاط الوصول:</label>
+            <select id="arrival-points" required>
+                <option value="">اختر نقطة وصول</option>
+            </select>
+
+            <label for="departure-time">وقت الرحلة:</label>
+            <select id="departure-time" required>
+                <option value="">اختر الوقت</option>
+                <option value="فورا">فورا</option>
+                <option value="خلال ربع ساعة">خلال ربع ساعة</option>
+                <option value="خلال نصف ساعة">خلال نصف ساعة</option>
+                <option value="خلال ساعة">خلال ساعة</option>
+            </select>
+
+            <label for="trip-cost">تكلفة الرحلة:</label>
+            <input type="number" id="trip-cost" placeholder="أدخل تكلفة الرحلة" required>
+
+            <button type="submit">تقديم الرحلة</button>
+        </form>
+
+        <div>
+            <a href="index.html">العودة إلى الصفحة الرئيسية</a>
+        </div>
+        
+        <div>
+            <a href="settings.html">تعديل كلمة المرور أو رقم الهاتف</a>
+        </div>
+    </div>
+
+    <script>
+        const pointsData = {
+            عمان: ["جسر ماركا", "المحطة", "دوار الداخلية", "دوار المدينة الرياضية", "صويلح", "المدينة الطبية"],
+            الزرقاء: ["المجمع القديم والجديد", "خو", "الهاشمية", "جسر خو"],
+            إربد: ["مجمع الاغوار", "مجمع عمان", "الحصن", "مستشفى الملك عبدالله"],
+            المفرق: ["المجمع الغربي", "المجمع الشرقي", "جامعة ال البيت", "دوار الدبابة"],
+            جرش: ["دوار المنتزة", "دوار القيروان", "بوابة عمان"],
+            عجلون: ["عجلون"],
+            السلط: ["السلط"],
+            الكرك: ["الكرك"],
+            مادبا: ["جسر مادبا", "مادبا"],
+            معان: ["معان"],
+            العقبة: ["العقبة"],
+            الطفيلة: ["الطفيلة"]
+        };
+
+        function updatePoints(city, pointsSelect) {
+            pointsSelect.innerHTML = '<option value="">اختر نقطة</option>'; // إعادة تعيين النقاط
+            if (pointsData[city]) {
+                pointsData[city].forEach(point => {
+                    const option = document.createElement('option');
+                    option.value = point;
+                    option.textContent = point;
+                    pointsSelect.appendChild(option);
+                });
+            }
+        }
+
+        document.getElementById('departure-location').addEventListener('change', function() {
+            const city = this.value;
+            updatePoints(city, document.getElementById('departure-points'));
+        });
+
+        document.getElementById('arrival-location').addEventListener('change', function() {
+            const city = this.value;
+            updatePoints(city, document.getElementById('arrival-points'));
+        });
+
+        // ملء نقاط الانطلاق والأوجه الأولى بشكل افتراضي
+        updatePoints('عمان', document.getElementById('departure-points'));
+        updatePoints('عمان', document.getElementById('arrival-points'));
+
+        // إضافة حدث لتقديم النموذج
+        document.getElementById('offer-trip-form').addEventListener('submit', async function(event) {
+            event.preventDefault(); // منع إعادة تحميل الصفحة
+
+            const departureLocation = document.getElementById('departure-location').value;
+            const departurePoints = document.getElementById('departure-points').value;
+            const arrivalLocation = document.getElementById('arrival-location').value;
+            const arrivalPoints = document.getElementById('arrival-points').value;
+            const departureTime = document.getElementById('departure-time').value;
+            const tripCost = document.getElementById('trip-cost').value;
+
+            const tripData = {
+                departure: departureLocation,
+                departurePoint: departurePoints,
+                arrival: arrivalLocation,
+                arrivalPoint: arrivalPoints,
+                time: departureTime,
+                cost: tripCost
+            };
+
+            // تأكد من أن التوكن موجود
+            const token = localStorage.getItem('token'); // تأكد من أنك تخزن التوكن في localStorage بعد تسجيل الدخول
+            if (!token) {
+                alert('يرجى تسجيل الدخول أولا.'); // إظهار رسالة تحذيرية
+                return; // الخروج من الدالة إذا لم يكن هناك توكن
+            }
+
+            try {
+                const response = await fetch('/add-trip', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` // إرسال التوكن في الهيدر
+                    },
+                    body: JSON.stringify(tripData)
+                });
+
+                const result = await response.json(); // تأكد من تعريف result هنا
+
+                if (response.ok) {
+                    alert(result.message); // إظهار رسالة نجاح
+                } else {
+                    alert(`فشل في إضافة الرحلة: ${result.message}`); // إظهار رسالة خطأ
+                }
+            } catch (error) {
+                alert(`حدث خطأ: ${error.message}`); // إظهار رسالة خطأ في حالة فشل الاتصال
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحة الإدارة الرئيسية</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .tab {
+            display: inline-block;
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            margin-right: 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .tab:hover {
+            background-color: #218838;
+        }
+
+        .tab-content {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: right; /* محاذاة النص إلى اليمين */
+        }
+
+        th {
+            background-color: #28a745;
+            color: white;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .notification {
+            background-color: #ffc107;
+            color: #212529;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none; /* إخفاء الإشعارات افتراضيًا */
+        }
+
+        .alert-bell {
+            position: relative;
+            display: inline-block;
+        }
+
+        .bell-icon {
+            font-size: 20px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 3px 6px;
+            font-size: 12px;
+        }
+
+        .send-options {
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* إضافة تنسيق لخانة البحث */
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>صفحة الإدارة الرئيسية</h1>
+        <button onclick="logout()">خروج</button> <!-- زر الخروج -->
+    </header>
+
+    <div class="container">
+        <div>
+            <div class="tab" onclick="showTab('notifications')">
+                <span class="alert-bell">
+                    <i class="bell-icon">🔔</i>
+                    <span class="notification-badge" id="notification-badge">3</span> <!-- عدد الإشعارات -->
+                </span>
+                الإشعارات
+            </div>
+            <div class="tab" onclick="showTab('users')">إدارة المستخدمين</div>
+            <div class="tab" onclick="showTab('messages')">إرسال الرسائل</div>
+            <div class="tab" onclick="showTab('settings')">الإعدادات</div>
+        </div>
+
+        <div id="notifications" class="tab-content">
+            <h2>الإشعارات</h2>
+            <div class="notification" id="notification-message">تم إرسال رسالة بنجاح.</div>
+        </div>
+
+        <div id="users" class="tab-content active">
+            <h2>قائمة المستخدمين</h2>
+
+            <!-- خانة البحث -->
+            <div class="search-container">
+                <label for="search"></label><input type="text" id="search" placeholder="ابحث عن عميل (الاسم، الرقم المرجعي، رقم الهاتف)" oninput="filterUsers()">
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>الرقم المرجعي</th>
+                        <th>الاسم</th>
+                        <th>رقم الهاتف</th>
+                        <th>تاريخ انتهاء الاشتراك</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="user-table-body">
+                    <tr>
+                        <td>REF123</td>
+                        <td>أحمد محمد</td>
+                        <td>0770288772</td>
+                        <td>2025-12-31</td>
+                        <td>
+                            <button onclick="viewDetails('REF123')">عرض التفاصيل</button>
+                        </td>
+                    </tr>
+                    <!-- أضف المزيد من المستخدمين هنا -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="messages" class="tab-content">
+            <h2>إرسال الرسائل</h2>
+            <form onsubmit="sendMessage(event)">
+                <label for="message">اكتب رسالتك:</label>
+                <textarea id="message" rows="4" cols="50"></textarea>
+                <br>
+
+                <div class="send-options">
+                    <label>طريقة الإرسال:</label><br>
+                    <input type="radio" id="to-phone" name="send-method" value="phone" checked>
+                    <label for="to-phone">إلى الهاتف</label>
+                    <input type="radio" id="to-email" name="send-method" value="email">
+                    <label for="to-email">إلى البريد الإلكتروني</label>
+                    <input type="radio" id="to-notification" name="send-method" value="notification">
+                    <label for="to-notification">إشعار داخل التطبيق</label>
+                    <input type="radio" id="to-all" name="send-method" value="all">
+                    <label for="to-all">إلى الجميع</label>
+                </div>
+
+                <button type="submit">إرسال</button>
+            </form>
+        </div>
+
+        <div id="settings" class="tab-content">
+            <h2>الإعدادات</h2>
+            <label for="admin-password">تغيير كلمة سر المشرف:</label>
+            <input type="password" id="admin-password" placeholder="كلمة السر الجديدة" required>
+            <button onclick="changeAdminPassword()">تغيير كلمة السر</button>
+            <p id="password-message"></p>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        function viewDetails(reference) {
+            // افتح صفحة جديدة لعرض تفاصيل العميل
+            window.open(`client-details.html?ref=${reference}`, '_blank');
+        }
+
+        function filterUsers() {
+            const searchValue = document.getElementById('search').value.toLowerCase();
+            const tableBody = document.getElementById('user-table-body');
+            const rows = tableBody.getElementsByTagName('tr');
+
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                let rowVisible = false;
+
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].innerText.toLowerCase().includes(searchValue)) {
+                        rowVisible = true;
+                        break;
+                    }
+                }
+                rows[i].style.display = rowVisible ? '' : 'none';
+            }
+        }
+
+        function logout() {
+            // منطق تسجيل الخروج
+            alert('تم تسجيل الخروج بنجاح.');
+            window.location.href = 'login.html'; // انتقل إلى صفحة تسجيل الدخول
+        }
+
+        function sendMessage(event) {
+            event.preventDefault();
+            // منطق إرسال الرسالة
+            const message = document.getElementById('message').value;
+            const method = document.querySelector('input[name="send-method"]:checked').value;
+
+            alert(`تم إرسال الرسالة: "${message}" باستخدام طريقة: ${method}`);
+        }
+
+        function changeAdminPassword() {
+            const newPassword = document.getElementById('admin-password').value;
+            // منطق تغيير كلمة السر
+            document.getElementById('password-message').innerText = `تم تغيير كلمة السر إلى: ${newPassword}`;
+        }
+    </script>
+</body>
+</html>

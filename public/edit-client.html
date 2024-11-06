@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تعديل بيانات العميل</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        input[type="text"], input[type="tel"], input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>تعديل بيانات العميل</h1>
+        <form id="edit-client-form">
+            <label for="client-reference">الرقم المرجعي:</label>
+            <input type="text" id="client-reference" name="client-reference" required>
+
+            <label for="client-name">الاسم:</label>
+            <input type="text" id="client-name" name="client-name" required>
+
+            <label for="client-phone">رقم الهاتف:</label>
+            <input type="tel" id="client-phone" name="client-phone" required>
+
+            <label for="client-expiration">تاريخ انتهاء الاشتراك:</label>
+            <input type="date" id="client-expiration" name="client-expiration" required>
+
+            <button type="submit">حفظ التعديلات</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('edit-client-form').onsubmit = function(event) {
+            event.preventDefault();
+            alert('تم حفظ التعديلات بنجاح!');
+            // يمكنك إضافة منطق لحفظ التعديلات في قاعدة البيانات هنا
+        };
+    </script>
+</body>
+</html>

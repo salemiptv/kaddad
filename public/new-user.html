@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل مستخدم جديد</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 90%; /* تغيير العرض إلى نسبة مئوية لتحسين الاستجابة */
+            max-width: 400px; /* تحديد العرض الأقصى */
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: right; /* محاذاة النص إلى اليمين */
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .error-message {
+            color: red;
+            display: none; /* إخفاء الرسالة افتراضياً */
+        }
+
+        .success-message {
+            color: green;
+            display: none; /* إخفاء رسالة النجاح افتراضياً */
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: 95%; /* زيادة الاستجابة على الشاشات الصغيرة */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>تسجيل مستخدم جديد</h1>
+    </header>
+
+    <div class="container">
+        <form id="new-user-form" method="POST" enctype="multipart/form-data">
+            <label for="full-name">الاسم بالكامل (أربع مقاطع):</label>
+            <input type="text" id="full-name" name="full-name" required>
+
+            <label for="phone">رقم الهاتف (يجب أن يبدأ بـ 07):</label>
+            <input type="text" id="phone" name="phone" pattern="^07\d{8}$" maxlength="10" required title="رقم الهاتف يجب أن يتكون من 10 خانات ويبدأ بـ 07">
+
+            <label for="national-id">الرقم الوطني:</label>
+            <input type="text" id="national-id" name="national-id" maxlength="10" required>
+
+            <label for="car-number">رقم السيارة:</label>
+            <input type="text" id="car-number" name="car-number" maxlength="6" required>
+
+            <label for="car-code">ترميز:</label>
+            <input type="text" id="car-code" name="car-code" maxlength="2" required>
+
+            <label for="car-reg">رقم تسجيل السيارة:</label>
+            <input type="text" id="car-reg" name="car-reg" maxlength="13" required>
+
+            <label for="car-type">نوع السيارة:</label>
+            <input type="text" id="car-type" name="car-type" required>
+
+            <label for="car-color">لون السيارة:</label>
+            <input type="text" id="car-color" name="car-color" required>
+
+            <label for="car-license">رفع صورة رخصة السيارة:</label>
+            <input type="file" id="car-license" name="car-license" accept="image/*" required>
+
+            <label for="driver-license">رفع صورة رخصة السائق:</label>
+            <input type="file" id="driver-license" name="driver-license" accept="image/*" required>
+
+            <label for="email">البريد الإلكتروني:</label>
+            <input type="email" id="email" name="email" required>
+
+            <div class="error-message" id="error-message">حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.</div>
+            <div class="success-message" id="success-message">تم التسجيل بنجاح.</div>
+
+            <button type="submit">تسجيل</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('new-user-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // منع الإرسال الافتراضي للنموذج للتحقق من صحة البيانات
+            const successMessage = document.getElementById('success-message');
+            const errorMessage = document.getElementById('error-message');
+            const submitButton = event.target.querySelector('button[type="submit"]');
+            submitButton.disabled = true; // تعطيل الزر أثناء الإرسال
+
+            // هنا يمكنك تنفيذ الطلب AJAX لإرسال النموذج
+            // إذا نجح، عرض رسالة النجاح
+            successMessage.style.display = 'block';
+            // إذا حدث خطأ، عرض رسالة الخطأ
+            // errorMessage.style.display = 'block';
+        });
+    </script>
+</body>
+</html>

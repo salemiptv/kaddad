@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حجوزاتي</title>
+    <link rel="stylesheet" href="styles.css"> <!-- تأكد من وجود ملف CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 90%; /* عرض مناسب للهواتف */
+            max-width: 600px; /* عرض ثابت للأجهزة الكبيرة */
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .booking {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .booking h3 {
+            margin-top: 0;
+        }
+
+        .no-bookings {
+            background-color: #ffc107;
+            color: #fff;
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>حجوزاتي</h1>
+        <div id="bookingsContainer"></div>
+    </div>
+
+    <script>
+        // هنا يمكنك جلب البيانات من الخادم (Backend) إذا كنت تستخدم API
+        document.addEventListener("DOMContentLoaded", function() {
+            // افتراضياً، قمنا بإضافة بعض الحجوزات للمثال
+            const bookings = [
+                {
+                    driverName: "أحمد",
+                    carType: "تويوتا",
+                    carColor: "أبيض",
+                    departureLocation: "عمان",
+                    arrivalLocation: "إربد",
+                    time: "10:00 صباحاً",
+                    cost: "5 دينار"
+                },
+                {
+                    driverName: "محمود",
+                    carType: "هيونداي",
+                    carColor: "أسود",
+                    departureLocation: "الزرقاء",
+                    arrivalLocation: "جرش",
+                    time: "12:00 ظهراً",
+                    cost: "7 دينار"
+                }
+            ];
+
+            const bookingsContainer = document.getElementById('bookingsContainer');
+            bookingsContainer.innerHTML = ''; // تفريغ المحتوى الحالي
+
+            if (bookings.length > 0) {
+                bookings.forEach(booking => {
+                    const bookingDiv = document.createElement('div');
+                    bookingDiv.classList.add('booking');
+                    bookingDiv.innerHTML = `
+                        <h3>${booking.driverName} - ${booking.carType}</h3>
+                        <p>اللون: ${booking.carColor}</p>
+                        <p>نقطة الانطلاق: ${booking.departureLocation}</p>
+                        <p>نقطة الوصول: ${booking.arrivalLocation}</p>
+                        <p>وقت الرحلة: ${booking.time}</p>
+                        <p>تكلفة الرحلة: ${booking.cost} دينار</p>
+                    `;
+                    bookingsContainer.appendChild(bookingDiv);
+                });
+            } else {
+                bookingsContainer.innerHTML = '<p class="no-bookings">لا توجد حجوزات حتى الآن.</p>';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الضيوف - Kaddad</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        header img {
+            max-width: 80px;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 30px;
+            width: 90%;
+            max-width: 350px; /* تصغير النموذج */
+        }
+
+        input {
+            width: 100%;
+            margin: 10px 0;
+            padding: 12px 10px; /* تقليل الحشوة */
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px; /* تصغير حجم الخط */
+        }
+
+        button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 12px 0; /* تقليل الحشوة */
+            border: none;
+            border-radius: 8px;
+            background-color: #28a745;
+            color: #fff;
+            font-size: 16px; /* تصغير حجم الخط */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .footer-text {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+        }
+
+        .service-provider-button {
+            background-color: #007bff; /* لون الزر */
+            font-size: 16px; /* حجم الخط للزر */
+            margin-top: 10px; /* مسافة أعلى الزر */
+        }
+
+        .service-provider-button:hover {
+            background-color: #0056b3; /* لون الزر عند التحويم */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="logo.png" alt="شعار Kaddad" id="logo">
+        <h1>Kaddad</h1>
+    </header>
+
+    <div class="container">
+        <input type="text" id="phone" placeholder="رقم الهاتف">
+        <input type="text" id="name" placeholder="الاسم">
+        <button id="registerButton">تسجيل</button>
+        <button class="service-provider-button" onclick="window.location.href='login-provider.html'">الدخول كمقدم خدمة نقل</button>
+        <p class="footer-text">اختر الخيار المناسب لك.</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Kaddad. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script type="module">
+        // استيراد المكتبات من CDN
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+        // إعداد تهيئة Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyChm1-oS5eWjWeKap2HjMBu435chtbCNhU",
+            authDomain: "kaddad-2.firebaseapp.com",
+            databaseURL: "https://kaddad-2-default-rtdb.firebaseio.com/",
+            projectId: "kaddad-2",
+            storageBucket: "kaddad-2.appspot.com",
+            messagingSenderId: "941546196207",
+            appId: "1:941546196207:web:5c4c44513c3eedf1eedf1a"
+        };
+
+        // تهيئة Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // تسجيل المستخدم
+        document.getElementById('registerButton').addEventListener('click', () => {
+            const phone = document.getElementById('phone').value;
+            const name = document.getElementById('name').value;
+
+            // إرسال البيانات إلى Firebase
+            const dbRef = ref(database, 'guests/' + phone);
+            set(dbRef, {
+                name: name,
+                phone: phone
+            })
+            .then(() => {
+                alert('تم التسجيل بنجاح!');
+                // الانتقال إلى الصفحة الأخرى بعد التسجيل
+                window.location.href = 'search.html'; // تأكد من وجود هذه الصفحة
+            })
+            .catch((error) => {
+                console.error('خطأ في التسجيل:', error);
+            });
+        });
+    </script>
+</body>
+</html>

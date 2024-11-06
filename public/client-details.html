@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل العميل</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: right; /* محاذاة النص إلى اليمين */
+        }
+
+        th {
+            background-color: #28a745;
+            color: white;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .actions {
+            margin-top: 20px;
+        }
+
+        /* نموذج تعديل البيانات */
+        .edit-form {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .edit-form input,
+        .edit-form input[type="file"] {
+            width: calc(100% - 24px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .edit-form button {
+            background-color: #28a745; /* لون زر الحفظ */
+        }
+
+        .car-license-image {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>تفاصيل العميل</h1>
+        
+        <table>
+            <tbody>
+                <tr>
+                    <th>الرقم المرجعي</th>
+                    <td id="client-reference">REF123</td>
+                </tr>
+                <tr>
+                    <th>الاسم</th>
+                    <td id="client-name">أحمد محمد</td>
+                </tr>
+                <tr>
+                    <th>رقم الهاتف</th>
+                    <td id="client-phone">0770288772</td>
+                </tr>
+                <tr>
+                    <th>تاريخ انتهاء الاشتراك</th>
+                    <td id="client-expiration">2025-12-31</td>
+                </tr>
+                <tr>
+                    <th>نوع السيارة</th>
+                    <td id="client-car-type">سيدان</td>
+                </tr>
+                <tr>
+                    <th>رقم السيارة</th>
+                    <td id="client-car-number">123456</td>
+                </tr>
+                <tr>
+                    <th>لون السيارة</th>
+                    <td id="client-car-color">أحمر</td>
+                </tr>
+                <tr>
+                    <th>ترميز السيارة</th>
+                    <td id="client-car-code">CAR123</td>
+                </tr>
+                <tr>
+                    <th>رخصة السيارة</th>
+                    <td id="client-car-license">
+                        <img id="car-license-img" src="" alt="رخصة السيارة" style="max-width: 100px; display: none;" />
+                        <input type="file" id="car-license-input" accept="image/*" onchange="previewLicenseImage(event)" />
+                    </td>
+                </tr>
+                <!-- أضف المزيد من تفاصيل العميل هنا -->
+            </tbody>
+        </table>
+
+        <div class="actions">
+            <button onclick="editClient()">تعديل البيانات</button>
+            <button onclick="sendMessage()">إرسال رسالة</button>
+            <button onclick="deleteClient()">حذف العميل</button>
+            <button onclick="exit()">خروج</button> <!-- زر الخروج بدلاً من زر العودة -->
+        </div>
+
+        <div class="edit-form" id="edit-form">
+            <h2>تعديل بيانات العميل</h2>
+            <label for="edit-client-name"></label><input type="text" id="edit-client-name" placeholder="الاسم" />
+            <label for="edit-client-phone"></label><input type="text" id="edit-client-phone" placeholder="رقم الهاتف" />
+            <label for="edit-client-expiration"></label><input type="text" id="edit-client-expiration" placeholder="تاريخ انتهاء الاشتراك" />
+            <label for="edit-client-car-type"></label><input type="text" id="edit-client-car-type" placeholder="نوع السيارة" />
+            <label for="edit-client-car-number"></label><input type="text" id="edit-client-car-number" placeholder="رقم السيارة" />
+            <label for="edit-client-car-color"></label><input type="text" id="edit-client-car-color" placeholder="لون السيارة" />
+            <label for="edit-client-car-code"></label><input type="text" id="edit-client-car-code" placeholder="ترميز السيارة" />
+            <div class="car-license-image">
+                <label for="edit-client-car-license">رخصة السيارة:</label>
+                <input type="file" id="edit-client-car-license" accept="image/*" onchange="previewEditLicenseImage(event)" />
+                <img id="edit-car-license-img" src="" alt="رخصة السيارة" style="max-width: 100px; display: none;" />
+            </div>
+            <button onclick="saveChanges()">حفظ التغييرات</button>
+            <button onclick="cancelEdit()">إلغاء</button>
+        </div>
+    </div>
+
+    <script>
+        function editClient() {
+            // عرض بيانات العميل في نموذج التعديل
+            document.getElementById('edit-client-name').value = document.getElementById('client-name').innerText;
+            document.getElementById('edit-client-phone').value = document.getElementById('client-phone').innerText;
+            document.getElementById('edit-client-expiration').value = document.getElementById('client-expiration').innerText;
+            document.getElementById('edit-client-car-type').value = document.getElementById('client-car-type').innerText;
+            document.getElementById('edit-client-car-number').value = document.getElementById('client-car-number').innerText;
+            document.getElementById('edit-client-car-color').value = document.getElementById('client-car-color').innerText;
+            document.getElementById('edit-client-car-code').value = document.getElementById('client-car-code').innerText;
+
+            // إظهار نموذج التعديل
+            document.getElementById('edit-form').style.display = 'block';
+        }
+
+        function previewLicenseImage(event) {
+            const img = document.getElementById('car-license-img');
+            img.src = URL.createObjectURL(event.target.files[0]);
+            img.style.display = 'block';
+        }
+
+        function previewEditLicenseImage(event) {
+            const img = document.getElementById('edit-car-license-img');
+            img.src = URL.createObjectURL(event.target.files[0]);
+            img.style.display = 'block';
+        }
+
+        function saveChanges() {
+            // حفظ التغييرات (يمكنك إضافة منطق لتحديث قاعدة البيانات هنا)
+            document.getElementById('client-name').innerText = document.getElementById('edit-client-name').value;
+            document.getElementById('client-phone').innerText = document.getElementById('edit-client-phone').value;
+            document.getElementById('client-expiration').innerText = document.getElementById('edit-client-expiration').value;
+            document.getElementById('client-car-type').innerText = document.getElementById('edit-client-car-type').value;
+            document.getElementById('client-car-number').innerText = document.getElementById('edit-client-car-number').value;
+            document.getElementById('client-car-color').innerText = document.getElementById('edit-client-car-color').value;
+            document.getElementById('client-car-code').innerText = document.getElementById('edit-client-car-code').value;
+
+            alert('تم حفظ التغييرات بنجاح.');
+            document.getElementById('edit-form').style.display = 'none'; // إخفاء نموذج التعديل
+        }
+
+        function cancelEdit() {
+            document.getElementById('edit-form').style.display = 'none'; // إخفاء نموذج التعديل
+        }
+
+        function sendMessage() {
+            const clientPhone = document.getElementById('client-phone').innerText;
+            const messageType = prompt("اختر نوع الرسالة:\n1. إشعار داخل التطبيق\n2. رسالة نصية\n3. كلاهما");
+            let messageContent;
+
+            switch (messageType) {
+                case '1':
+                    messageContent = "هذا إشعار داخل التطبيق للعميل.";
+                    // منطق إرسال إشعار داخل التطبيق
+                    alert("تم إرسال الإشعار داخل التطبيق.");
+                    break;
+                case '2':
+                    messageContent = "هذه رسالة نصية للعميل على الرقم: " + clientPhone;
+                    // منطق إرسال رسالة نصية
+                    alert("تم إرسال الرسالة النصية.");
+                    break;
+                case '3':
+                    messageContent = "هذا إشعار داخل التطبيق والرسالة النصية للعميل.";
+                    // منطق إرسال إشعار داخل التطبيق
+                    alert("تم إرسال الإشعار داخل التطبيق.");
+                    // منطق إرسال رسالة نصية
+                    alert("تم إرسال الرسالة النصية.");
+                    break;
+                default:
+                    alert("نوع الرسالة غير صالح.");
+            }
+        }
+
+        function deleteClient() {
+            // منطق لحذف العميل
+            alert("تم حذف العميل.");
+        }
+
+        function exit() {
+            // منطق للخروج من الصفحة
+            alert("تم الخروج.");
+        }
+    </script>
+</body>
+</html>

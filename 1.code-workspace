@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../1"
+		},
+		{
+			"path": "../1/PUPLIC"
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true
+	}
+}

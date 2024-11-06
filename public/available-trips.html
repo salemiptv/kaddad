@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الرحلات المتاحة</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* إضافة بعض التنسيقات لتحسين المظهر */
+        .container {
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+        #trip-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .trip-card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #f9f9f9;
+            transition: transform 0.2s;
+        }
+        .trip-card:hover {
+            transform: scale(1.02);
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .driver-phone {
+            color: #007BFF;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .driver-phone:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>الرحلات المتاحة</h1>
+    </header>
+
+    <div class="container">
+        <ul id="trip-list">
+            <!-- سيتم عرض الرحلات هنا -->
+        </ul>
+        
+        <div>
+            <a href="index.html">العودة إلى الصفحة الرئيسية</a>
+        </div>
+    </div>
+
+    <script>
+    // جلب الرحلات وعرضها من الأحدث إلى الأقدم
+    fetch('/get-trips')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(trips => {
+            const tripList = document.getElementById('trip-list');
+            trips.sort((a, b) => new Date(b.date) - new Date(a.date)); // الترتيب من الأحدث إلى الأقدم
+
+            // تحقق من أن trips هو مصفوفة
+            if (Array.isArray(trips)) {
+                trips.forEach(trip => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <div class="trip-card">
+                            <p><strong>اسم السائق:</strong> ${trip.driverName}</p>
+                            <p><strong>نوع السيارة:</strong> ${trip.carType} <strong>لون السيارة:</strong> ${trip.carColor}</p>
+                            <p><strong>الانطلاق:</strong> ${trip.departureLocation}</p>
+                            <p><strong>رقم السائق:</strong> <span class="driver-phone" onclick="callDriver('${trip.driverPhone}')">${trip.driverPhone}</span></p>
+                            <button onclick="bookTrip('${trip.driverPhone}')">حجز</button>
+                        </div>
+                    `;
+                    tripList.appendChild(listItem);
+                });
+            } else {
+                tripList.innerHTML = '<li>لا توجد رحلات متاحة.</li>';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('حدث خطأ أثناء الاتصال بالخادم.');
+        });
+
+    function bookTrip(driverPhone) {
+        fetch(`/book-trip/${driverPhone}`, {
+            method: 'POST'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                alert('تم إرسال طلب الحجز للسائق.');
+            } else {
+                alert('حدث خطأ أثناء إرسال طلب الحجز.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('حدث خطأ أثناء الاتصال بالخادم.');
+        });
+    }
+
+    function callDriver(driverPhone) {
+        window.location.href = `tel:${driverPhone}`;
+    }
+    </script>
+</body>
+</html>

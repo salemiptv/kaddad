@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>الحصول على FCM Token</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging.js"></script>
+</head>
+<body>
+    <h1>احصل على FCM Token</h1>
+    <button id="get-token">الحصول على الرمز</button>
+    <p id="token"></p>
+
+    <script>
+        // إعداد Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAQ4qPKDRT7QGUKoJZOMHpu4vWjpCs8r7w",
+            authDomain: "kaddad-3d621.firebaseapp.com",
+            projectId: "kaddad-3d621",
+            storageBucket: "kaddad-3d621.appspot.com",
+            messagingSenderId: "95122086215",
+            appId: "1:95122086215:web:62dd3b1983a38e2cc89462",
+        };
+
+        // تهيئة التطبيق
+        const app = firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
+
+        // طلب إذن الإشعارات
+        document.getElementById('get-token').addEventListener('click', async () => {
+            try {
+                const token = await messaging.getToken({ vapidKey: "-RkcjlZXS3mau3nURjfzQXxicgU5GP4aVEUhp3R4HNw" });
+                document.getElementById('token').textContent = `FCM Token: ${token}`;
+                console.log('FCM Token:', token);
+            } catch (error) {
+                console.error('Unable to retrieve FCM token:', error);
+            }
+        });
+    </script>
+</body>
+</html>

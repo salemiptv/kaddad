@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إعدادات الحساب</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>إعدادات الحساب</h1>
+    </header>
+
+    <div class="container">
+        <form id="account-settings-form">
+            <label for="email">تحديث البريد الإلكتروني:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="phone">تحديث رقم الهاتف:</label>
+            <input type="tel" id="phone" name="phone" required>
+
+            <label for="password">تحديث كلمة المرور:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">تحديث الإعدادات</button>
+        </form>
+
+        <!-- رابط العودة إلى صفحة المستخدم -->
+        <div>
+            <a href="user.html">العودة إلى صفحة المستخدم</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('account-settings-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const updatedData = {
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                password: document.getElementById('password').value
+            };
+
+            fetch('/update-account-settings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('حدث خطأ أثناء تحديث الإعدادات.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('حدث خطأ أثناء الاتصال بالخادم.');
+            });
+        });
+    </script>
+</body>
+</html>

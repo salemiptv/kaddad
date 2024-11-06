@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الموافقة على المستخدم</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: center;
+            background-color: #f3f3f3;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        .user-info {
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .approve-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+        }
+        .reject-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>بيانات المستخدم</h2>
+        <div id="user-info" class="user-info">
+            <!-- سيتم عرض بيانات المستخدم هنا -->
+        </div>
+        <button class="approve-btn" onclick="approveUser()">موافقة</button>
+        <button class="reject-btn" onclick="rejectUser()">رفض</button>
+        <div id="message" class="message"></div>
+    </div>
+
+    <script>
+        // جلب بيانات المستخدم وعرضها
+        async function fetchUserData() {
+            const email = new URLSearchParams(window.location.search).get('email'); // استرداد البريد من الرابط
+            try {
+                const response = await fetch(`/get-user/${email}`);
+                if (response.ok) {
+                    const userData = await response.json();
+                    document.getElementById('user-info').innerHTML = `
+                        <p>الاسم: ${userData.name}</p>
+                        <p>البريد الإلكتروني: ${userData.email}</p>
+                        <p>رقم الهاتف: ${userData.phone}</p>
+                        <p>الرقم الوطني: ${userData.id}</p>
+                    `;
+                } else {
+                    document.getElementById('user-info').innerHTML = 'لم يتم العثور على المستخدم.';
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        }
+
+        // الموافقة على المستخدم
+        async function approveUser() {
+            const email = new URLSearchParams(window.location.search).get('email');
+            try {
+                const response = await fetch(`/approve-user/${email}`, { method: 'POST' });
+                const result = await response.json();
+                document.getElementById('message').textContent = result.message;
+            } catch (error) {
+                console.error('Error approving user:', error);
+            }
+        }
+
+        // رفض المستخدم
+        async function rejectUser() {
+            const email = new URLSearchParams(window.location.search).get('email');
+            try {
+                const response = await fetch(`/reject-user/${email}`, { method: 'DELETE' });
+                const result = await response.json();
+                document.getElementById('message').textContent = result.message;
+            } catch (error) {
+                console.error('Error rejecting user:', error);
+            }
+        }
+
+        // استدعاء دالة استرجاع بيانات المستخدم عند تحميل الصفحة
+        window.onload = fetchUserData;
+    </script>
+</body>
+</html>

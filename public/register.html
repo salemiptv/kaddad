@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل مستخدم جديد</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 10px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+            overflow: hidden;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px; 
+            width: 100%;
+            max-width: 380px;
+            overflow: auto; 
+            height: 80vh; 
+            box-sizing: border-box; 
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px; 
+            color: #007bff;
+            font-size: 20px;
+        }
+
+        /* فئة جديدة */
+        .new-class {
+            color: red; /* تغيير لون النص إلى الأحمر */
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="file"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            margin-top: 15px; 
+            width: 100%;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .inline-fields {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .inline-fields > div {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">تسجيل مستخدم جديد</h1>
+        <form action="/register" method="POST" enctype="multipart/form-data">
+            <label for="fullName">الاسم الكامل:</label>
+            <input type="text" id="fullName" name="fullName" required>
+
+            <label for="nationalId">الرقم الوطني:</label>
+            <input type="text" id="nationalId" name="nationalId" required>
+
+            <div class="inline-fields">
+                <div>
+                    <label for="carNumber">رقم السيارة:</label>
+                    <input type="text" id="carNumber" name="carNumber" required>
+                </div>
+                <div>
+                    <label for="code">ترميز السيارة:</label>
+                    <input type="text" id="code" name="code" required>
+                </div>
+            </div>
+
+            <label for="carRegistrationNumber">رقم تسجيل السيارة:</label>
+            <input type="text" id="carRegistrationNumber" name="carRegistrationNumber" required>
+
+            <label for="carType">نوع السيارة:</label>
+            <input type="text" id="carType" name="carType" required>
+
+            <label for="carColor">لون السيارة:</label>
+            <input type="text" id="carColor" name="carColor" required>
+
+            <label for="email">البريد الإلكتروني:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="phone">رقم الهاتف:</label>
+            <input type="tel" id="phone" name="phone" required>
+
+            <label for="carLicenseImage">صورة رخصة السيارة (الجهة الأمامية):</label>
+            <input type="file" id="carLicenseImage" name="carLicenseImage" accept="image/*" required>
+
+            <label for="carLicenseImageBack">صورة رخصة السيارة (الجهة الخلفية):</label>
+            <input type="file" id="carLicenseImageBack" name="carLicenseImageBack" accept="image/*" required>
+
+            <label for="driverLicenseImage">صورة رخصة السائق:</label>
+            <input type="file" id="driverLicenseImage" name="driverLicenseImage" accept="image/*" required>
+
+            <button type="submit">تسجيل</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const element = document.querySelector('.title'); // العنصر الذي يحمل فئة 'title'
+            if (element) {
+                element.classList.add('new-class'); // إضافة الفئة الجديدة
+            } else {
+                console.error('Element not found');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موافقة المستخدم</title>
+</head>
+<body>
+    <h1>موافقة على المستخدم</h1>
+    <h2>تفاصيل المستخدم</h2>
+    <ul>
+        <li><strong>الاسم الكامل:</strong> <%= userName %></li>
+        <li><strong>البريد الإلكتروني:</strong> <%= userId %></li>
+        <li><strong>رقم السيارة:</strong> <%= userData.carNumber || 'غير متوفر' %></li>
+        <li><strong>اللون:</strong> <%= userData.carColor || 'غير متوفر' %></li>
+        <li><strong>الرقم الوطني:</strong> <%= userData.nationalId || 'غير متوفر' %></li>
+        <li><strong>رقم الهاتف:</strong> <%= userData.phone || 'غير متوفر' %></li>
+    </ul>
+
+    <form action="/approve-user/<%= userId %>" method="POST">
+        <button type="submit">موافقة</button>
+    </form>
+       <form action="/reject-user/<%= userId %>" method="POST">
+            <button type="submit">رفض</button>
+        </form>
+</body>
+</html>
