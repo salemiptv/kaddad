@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة رحلة جديدة</title>
+    <style>
+        /* تنسيقات الصفحة */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            direction: rtl;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 1.5rem;
+        }
+
+        form label {
+            font-weight: bold;
+            display: block;
+            margin-top: 1rem;
+            color: #555;
+        }
+
+        form select, 
+        form input[type="number"],
+        form button {
+            width: 100%;
+            padding: 0.8rem;
+            margin-top: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        form button {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        form a {
+            text-decoration: none;
+            color: #4CAF50;
+            display: inline-block;
+            margin-top: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9rem;
+        }
+
+        .success {
+            color: green;
+            font-size: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>إضافة رحلة جديدة</h2>
+        <form id="offer-trip-form">
+            <label for="departure-location">مكان الانطلاق:</label>
+            <select id="departure-location" required>
+                <option value="">اختر مدينة</option>
+                <option value="عمان">عمان</option>
+                <option value="الزرقاء">الزرقاء</option>
+                <option value="إربد">إربد</option>
+                <option value="المفرق">المفرق</option>
+                <option value="جرش">جرش</option>
+                <option value="عجلون">عجلون</option>
+                <option value="السلط">السلط</option>
+                <option value="الكرك">الكرك</option>
+                <option value="مادبا">مادبا</option>
+                <option value="معان">معان</option>
+                <option value="العقبة">العقبة</option>
+                <option value="الطفيلة">الطفيلة</option>
+            </select>
+
+            <label for="departure-points">نقاط الانطلاق:</label>
+            <select id="departure-points" required>
+                <option value="">اختر نقطة انطلاق</option>
+            </select>
+
+            <label for="arrival-location">مكان الوصول:</label>
+            <select id="arrival-location" required>
+                <option value="">اختر مدينة</option>
+                <option value="عمان">عمان</option>
+                <option value="الزرقاء">الزرقاء</option>
+                <option value="إربد">إربد</option>
+                <option value="المفرق">المفرق</option>
+                <option value="جرش">جرش</option>
+                <option value="عجلون">عجلون</option>
+                <option value="السلط">السلط</option>
+                <option value="الكرك">الكرك</option>
+                <option value="مادبا">مادبا</option>
+                <option value="معان">معان</option>
+                <option value="العقبة">العقبة</option>
+                <option value="الطفيلة">الطفيلة</option>
+            </select>
+
+            <label for="arrival-points">نقاط الوصول:</label>
+            <select id="arrival-points" required>
+                <option value="">اختر نقطة وصول</option>
+            </select>
+
+            <label for="departure-time">وقت الرحلة:</label>
+            <select id="departure-time" required>
+                <option value="">اختر الوقت</option>
+                <option value="فورا">فورا</option>
+                <option value="خلال ربع ساعة">خلال ربع ساعة</option>
+                <option value="خلال نصف ساعة">خلال نصف ساعة</option>
+                <option value="خلال ساعة">خلال ساعة</option>
+            </select>
+
+            <label for="trip-cost">تكلفة الرحلة:</label>
+            <input type="number" id="trip-cost" placeholder="أدخل تكلفة الرحلة" required>
+
+            <button type="submit">تقديم الرحلة</button>
+        </form>
+
+        <div class="footer-links">
+            <a href="index.html">العودة إلى الصفحة الرئيسية</a>
+            <a href="settings.html">تعديل كلمة المرور أو رقم الهاتف</a>
+        </div>
+
+        <div id="response-message"></div> <!-- رسالة الاستجابة -->
+    </div>
+
+    <script type="module">
+        // إعداد نقاط الانطلاق بناءً على المدينة المحددة
+        const pointsData = {
+            عمان: ["جسر ماركا", "المحطة", "دوار الداخلية", "دوار المدينة الرياضية", "صويلح", "المدينة الطبية"],
+            الزرقاء: ["المجمع القديم والجديد", "خو", "الهاشمية", "جسر خو"],
+            إربد: ["مجمع الاغوار", "مجمع عمان", "الحصن", "مستشفى الملك عبدالله"],
+            المفرق: ["المجمع الغربي", "المجمع الشرقي", "جامعة ال البيت", "دوار الدبابة"],
+            جرش: ["دوار المنتزة", "دوار القيروان", "بوابة عمان"],
+            عجلون: ["عجلون"],
+            السلط: ["السلط"],
+            الكرك: ["الكرك"],
+            مادبا: ["جسر مادبا", "مادبا"],
+            معان: ["معان"],
+            العقبة: ["العقبة"],
+            الطفيلة: ["الطفيلة"]
+        };
+
+        const departureLocationSelect = document.getElementById('departure-location');
+        const departurePointsSelect = document.getElementById('departure-points');
+        const arrivalLocationSelect = document.getElementById('arrival-location');
+        const arrivalPointsSelect = document.getElementById('arrival-points');
+        const offerTripForm = document.getElementById('offer-trip-form');
+        const responseMessage = document.getElementById('response-message');
+
+        // تحديث النقاط بناءً على المدينة المختارة
+        function updatePoints(selectElement, pointsSelect, city) {
+            pointsSelect.innerHTML = '<option value="">اختر نقطة</option>';
+            if (pointsData[city]) {
+                pointsData[city].forEach(point => {
+                    const option = document.createElement('option');
+                    option.value = point;
+                    option.textContent = point;
+                    pointsSelect.appendChild(option);
+                });
+            }
+        }
+
+        departureLocationSelect.addEventListener('change', () => {
+            updatePoints(departureLocationSelect, departurePointsSelect, departureLocationSelect.value);
+        });
+
+        arrivalLocationSelect.addEventListener('change', () => {
+            updatePoints(arrivalLocationSelect, arrivalPointsSelect, arrivalLocationSelect.value);
+        });
+
+        // إرسال بيانات الرحلة إلى الخادم عبر API
+        offerTripForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const tripData = {
+                departureLocation: departureLocationSelect.value,
+                departurePoint: departurePointsSelect.value,
+                arrivalLocation: arrivalLocationSelect.value,
+                arrivalPoint: arrivalPointsSelect.value,
+                departureTime: document.getElementById('departure-time').value,
+                tripCost: document.getElementById('trip-cost').value
+            };
+
+            // إرسال البيانات إلى الخادم عبر API
+            fetch('http://localhost:3000/add-trip', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(tripData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    responseMessage.innerHTML = '<p class="success">تم إضافة الرحلة بنجاح.</p>';
+                    offerTripForm.reset();
+                } else {
+                    responseMessage.innerHTML = `<p class="error">حدث خطأ أثناء إضافة الرحلة: ${data.message}</p>`;
+                }
+            })
+            .catch(error => {
+                responseMessage.innerHTML = `<p class="error">حدث خطأ في الاتصال بالخادم: ${error.message}</p>`;
+            });
+        });
+    </script>
+</body>
+</html>

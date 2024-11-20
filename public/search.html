@@ -1,217 +1,212 @@
 <!DOCTYPE html>
-<html lang="ar"> <!-- إضافة السمة lang -->
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- تعديل viewport -->
-    <title>البحث عن الرحلات</title> <!-- تأكد من وجود عنوان للصفحة -->
-    <link rel="stylesheet" href="styles.css"> <!-- تأكد من وجود ملف CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بحث عن رحلات</title>
     <style>
         body {
-            font-family: Arial, sans-serif; /* نوع الخط */
-            background-color: #f4f4f4; /* لون خلفية الصفحة */
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
             margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center; /* مركز الصفحة أفقياً */
-            align-items: center; /* مركز الصفحة عمودياً */
-            height: 100vh; /* ارتفاع الصفحة */
-            text-align: center; /* محاذاة النص في المنتصف */
-        }
-
-        .container {
-            background-color: white; /* لون خلفية الحاوية */
-            padding: 20px; /* مساحة داخل الحاوية */
-            border-radius: 8px; /* زوايا دائرية للحاوية */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* ظل */
-            width: 90%; /* عرض مناسب للهواتف */
-            max-width: 400px; /* عرض ثابت للأجهزة الكبيرة */
+            padding: 20px;
+            background-color: #f7f7f7;
         }
 
         h1 {
-            margin-bottom: 20px; /* مسافة أسفل العنوان */
+            text-align: center;
+            color: #333;
         }
 
-        label {
-            display: block; /* جعل العلامات ككتل */
-            margin-bottom: 5px; /* إضافة مسافة أسفل العلامة */
-            text-align: right; /* محاذاة النص لليمين */
+        .search-form {
+            margin: 0 auto;
+            max-width: 600px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
         }
 
-        select, button {
-            width: 100%; /* العرض الكامل للمكونات */
-            padding: 10px; /* مساحة داخلية */
-            border: 1px solid #ccc; /* لون الحدود */
-            border-radius: 4px; /* زوايا دائرية */
-            margin-bottom: 15px; /* إضافة مسافة بين العناصر */
-            box-sizing: border-box; /* تأكد من أن padding لا يؤثر على العرض */
+        .search-form label {
+            display: block;
+            margin: 10px 0 5px;
+            font-size: 16px;
+            color: #333;
         }
 
-        button {
-            background-color: #4CAF50; /* لون زر البحث */
-            color: white; /* لون نص الزر */
-            border: none; /* إزالة الحدود */
-            cursor: pointer; /* تغيير شكل المؤشر عند المرور فوق الزر */
+        .search-form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 16px;
         }
 
-        button:hover {
-            background-color: #45a049; /* تغيير لون الزر عند المرور عليه */
+        .search-form button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .search-form button:hover {
+            background-color: #45a049;
         }
 
         #tripsContainer {
-            margin-top: 20px; /* مسافة فوق حاوية الرحلات */
-            text-align: left; /* محاذاة النص لليسار */
+            margin-top: 20px;
+            max-width: 800px;
+            margin: 20px auto;
         }
 
         .trip {
-            background-color: #f9f9f9; /* لون خلفية الرحلة */
-            padding: 15px; /* مساحة داخلية للرحلة */
-            margin-bottom: 15px; /* مسافة أسفل كل رحلة */
-            border-radius: 4px; /* زوايا دائرية للرحلة */
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* ظل */
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .trip h3 {
-            margin-top: 0; /* إزالة المسافة العلوية في عنوان الرحلة */
+            margin: 0;
+            color: #333;
         }
 
-        /* تصميم زر الدخول كمقدم خدمة */
-        #provider-btn {
-            background-color: #2196F3; /* لون زر الدخول كمقدم خدمة */
+        .trip p {
+            margin: 5px 0;
+            color: #555;
         }
 
-        #provider-btn:hover {
-            background-color: #1976D2; /* تغيير لون الزر عند المرور عليه */
+        .trip button {
+            background-color: #008CBA;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
         }
 
-        .error-message {
-            color: red; /* لون الرسالة الخطأ */
-            margin-top: 20px; /* مسافة فوق رسالة الخطأ */
+        .trip button:hover {
+            background-color: #007B9F;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>البحث عن الرحلات</h1>
-        <form id="searchForm">
-            <label for="departure">نقطة الانطلاق:</label>
-            <select id="departure" required title="اختر نقطة الانطلاق"> <!-- إضافة title -->
-                <option value="">اختر نقطة الانطلاق</option>
-                <option value="عمان">عمان</option>
-                <option value="الزرقاء">الزرقاء</option>
-                <option value="إربد">إربد</option>
-                <option value="جرش">جرش</option>
-                <option value="عجلون">عجلون</option>
-                <option value="المفرق">المفرق</option>
-                <option value="البلقاء">البلقاء</option>
-                <option value="مادبا">مادبا</option>
-                <option value="الكرك">الكرك</option>
-                <option value="الطفيلة">الطفيلة</option>
-                <option value="معان">معان</option>
-                <option value="العقبة">العقبة</option>
-                <!-- المزيد من المدن الأردنية إذا لزم الأمر -->
-            </select>
+    <h1>بحث عن رحلات</h1>
 
-            <label for="arrival">نقطة الوصول:</label>
-            <select id="arrival" required title="اختر نقطة الوصول"> <!-- إضافة title -->
-                <option value="">اختر نقطة الوصول</option>
-                <option value="عمان">عمان</option>
-                <option value="الزرقاء">الزرقاء</option>
-                <option value="إربد">إربد</option>
-                <option value="جرش">جرش</option>
-                <option value="عجلون">عجلون</option>
-                <option value="المفرق">المفرق</option>
-                <option value="البلقاء">البلقاء</option>
-                <option value="مادبا">مادبا</option>
-                <option value="الكرك">الكرك</option>
-                <option value="الطفيلة">الطفيلة</option>
-                <option value="معان">معان</option>
-                <option value="العقبة">العقبة</option>
-                <!-- المزيد من المدن الأردنية إذا لزم الأمر -->
-            </select>
+    <div class="search-form">
+        <label for="departure">نقطة الانطلاق:</label>
+        <select id="departure" name="departure">
+            <option value="">اختر نقطة الانطلاق</option>
+            <option value="عمان">عمان</option>
+            <option value="الزرقاء">الزرقاء</option>
+            <option value="إربد">إربد</option>
+            <!-- أضف بقية المدن هنا -->
+        </select>
 
-            <button type="submit">ابحث عن الرحلات</button>
-        </form>
+        <label for="arrival">نقطة الوصول:</label>
+        <select id="arrival" name="arrival">
+            <option value="">اختر نقطة الوصول</option>
+            <option value="عمان">عمان</option>
+            <option value="الزرقاء">الزرقاء</option>
+            <option value="إربد">إربد</option>
+            <!-- أضف بقية المدن هنا -->
+        </select>
 
-        <div id="tripsContainer"></div>
-        <div class="error-message" id="errorMessage"></div> <!-- منطقة لعرض رسالة الخطأ -->
-
-        <!-- زر الدخول كمقدم خدمة -->
-        <div style="margin-top: 20px;">
-            <button id="provider-btn" onclick="window.location.href='login-provider.html'">الدخول كمقدم خدمة</button>
-        </div>
-
-        <!-- زر العودة -->
-        <div style="margin-top: 20px;">
-            <button onclick="goBack()">عودة</button>
-        </div>
+        <button id="searchBtn">ابحث</button>
     </div>
 
+    <div id="tripsContainer"></div>
+
     <script>
-        document.getElementById('searchForm').addEventListener('submit', function (e) {
-            e.preventDefault(); // منع إرسال النموذج بشكل افتراضي
+        document.getElementById('searchBtn').addEventListener('click', function () {
+            const departure = document.getElementById('departure').value.trim();
+            const arrival = document.getElementById('arrival').value.trim();
 
-            const departure = document.getElementById('departure').value; // الحصول على نقطة الانطلاق
-            const arrival = document.getElementById('arrival').value; // الحصول على نقطة الوصول
-            const errorMessage = document.getElementById('errorMessage'); // منطقة عرض رسالة الخطأ
+            if (!departure || !arrival) {
+                alert("يرجى اختيار نقاط الانطلاق والوصول.");
+                return;
+            }
 
-            fetch(`/get-trips?departure=${departure}&arrival=${arrival}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok'); // معالجة الأخطاء
-                    }
-                    return response.json(); // تحويل البيانات إلى JSON
-                })
+            fetch(`/get-trips?departure=${encodeURIComponent(departure)}&arrival=${encodeURIComponent(arrival)}`)
+                .then(response => response.json())
                 .then(data => {
                     const tripsContainer = document.getElementById('tripsContainer');
-                    tripsContainer.innerHTML = ''; // مسح محتويات الحاوية
-                    errorMessage.innerHTML = ''; // مسح رسالة الخطأ
+                    tripsContainer.innerHTML = '';
 
-                    if (data.success && data.trips.length > 0) {
-                        data.trips.forEach(trip => {
-                            const tripDiv = document.createElement('div');
-                            tripDiv.classList.add('trip');
-                            tripDiv.innerHTML = `
-                                <h3>${trip.driverName} - ${trip.carType}</h3>
-                                <p>اللون: ${trip.carColor}</p>
-                                <p>نقطة الانطلاق: ${trip.departureLocation}</p>
-                                <p>نقطة الوصول: ${trip.arrivalLocation}</p>
-                                <p>رقم السائق: ${trip.driverPhone}</p>
-                                <p>وقت الرحلة: ${trip.time}</p>
-                                <p>تكلفة الرحلة: ${trip.cost} دينار</p>
-                                <button onclick="bookTrip(${trip.id})">احجز الرحلة</button>
-                            `;
-                            tripsContainer.appendChild(tripDiv); // إضافة الرحلة إلى الحاوية
-                        });
+                    if (data.success) {
+                        if (data.trips.length > 0) {
+                            data.trips.forEach(trip => {
+                                const tripElement = document.createElement('div');
+                                tripElement.classList.add('trip');
+                                tripElement.innerHTML = `
+                                    <h3>الرحلة من ${trip.departureLocation} إلى ${trip.arrivalLocation}</h3>
+                                    <p>الوقت: ${trip.departureTime}</p>
+                                    <p>التكلفة: ${trip.tripCost} دينار</p>
+                                    <p>اسم السائق: ${trip.driverName}</p>
+                                    <p><a href="tel:${trip.driverPhone}">اتصل بالسائق: ${trip.driverPhone}</a></p>
+                                    <button onclick="bookTrip('${trip.id}', '${trip.departureLocation}', '${trip.arrivalLocation}', '${trip.departureTime}', '${trip.driverName}', '${trip.driverPhone}')">حجز</button>
+                                `;
+                                tripsContainer.appendChild(tripElement);
+                            });
+                        } else {
+                            tripsContainer.innerHTML = '<p>لا توجد رحلات متاحة للبحث الحالي.</p>';
+                        }
                     } else {
-                        errorMessage.innerHTML = 'لا توجد رحلات متاحة.'; // رسالة إذا لم توجد رحلات
+                        tripsContainer.innerHTML = `<p>${data.message || "حدث خطأ في جلب الرحلات."}</p>`;
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error); // طباعة الخطأ في وحدة التحكم
-                    errorMessage.innerHTML = 'حدث خطأ أثناء البحث عن الرحلات. حاول مرة أخرى لاحقًا.'; // رسالة خطأ عامة
+                    console.error('Error fetching trips:', error);
+                    alert("حدث خطأ أثناء جلب الرحلات.");
                 });
         });
 
-        function bookTrip(tripId) {
-            fetch(`/book-trip/${tripId}`, {
-                method: 'POST'
+        // دالة لحجز الرحلة
+        function bookTrip(tripId, departureLocation, arrivalLocation, departureTime, driverName, driverPhone) {
+            const guestToken = localStorage.getItem('guestToken'); // استرجاع توكن الضيف
+
+            if (!guestToken) {
+                alert("يرجى تسجيل الدخول أولاً.");
+                return;
+            }
+
+            // إرسال طلب لحجز الرحلة
+            fetch('/book-trip', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    tripId,
+                    departureLocation,
+                    arrivalLocation,
+                    departureTime,
+                    driverName,
+                    driverPhone,
+                    guestToken
+                })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('تم الحجز بنجاح!'); // رسالة نجاح الحجز
+                    alert("تم حجز الرحلة بنجاح!");
+                    // تحديث واجهة المستخدم أو إجراء إعادة تحميل
+                    location.reload();
                 } else {
-                    alert('فشل الحجز. حاول مرة أخرى.'); // رسالة فشل الحجز
+                    alert("حدث خطأ أثناء الحجز: " + data.message);
                 }
             })
             .catch(error => {
-                console.error('Error:', error); // طباعة الخطأ في وحدة التحكم
-                alert('حدث خطأ أثناء محاولة الحجز.'); // رسالة خطأ عامة
+                console.error('Error booking trip:', error);
+                alert("حدث خطأ أثناء الحجز.");
             });
-        }
-
-        function goBack() {
-            window.history.back(); // العودة إلى الصفحة السابقة
         }
     </script>
 </body>

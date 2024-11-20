@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سبب الرفض</title>
+</head>
+<body>
+    <h1>سبب الرفض</h1>
+    <p>الرجاء إدخال سبب رفض المستخدم:</p>
+    <form action="/reject-user-reason/<%= userEmail %>" method="POST">
+        <textarea name="reason" rows="4" cols="50" placeholder="اكتب سبب الرفض هنا..."></textarea><br><br>
+        <button type="submit">إرسال السبب</button>
+    </form>
+</body>
+</html>

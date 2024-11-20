@@ -2,110 +2,58 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة المستخدم</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            direction: rtl;
-            text-align: center;
-            background-color: #f3f3f3;
-        }
-        .container {
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            color: #333;
-        }
-        .user-info {
-            margin-bottom: 20px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin: 5px;
-            cursor: pointer;
-        }
-        .approve-btn {
-            background-color: #28a745;
-            color: white;
-            border: none;
-        }
-        .reject-btn {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-        }
-        .message {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #666;
-        }
-    </style>
+    <title>إرسال سبب الرفض</title>
 </head>
 <body>
-    <div class="container">
-        <h2>بيانات المستخدم</h2>
-        <div id="user-info" class="user-info">
-            <!-- سيتم عرض بيانات المستخدم هنا -->
-        </div>
-        <button class="approve-btn" onclick="approveUser()">موافقة</button>
-        <button class="reject-btn" onclick="rejectUser()">رفض</button>
-        <div id="message" class="message"></div>
+    <h1>إرسال سبب الرفض</h1>
+    <form id="reject-form">
+        <label for="reason">سبب الرفض:</label>
+        <textarea id="reason" name="reason" rows="4" cols="50" required></textarea>
+        <br>
+        <button type="submit">إرسال</button>
+    </form>
+
+    <div id="response-message" style="display:none; margin-top: 20px; color: green;">
+        تم إرسال سبب الرفض بنجاح!
+    </div>
+    <div id="error-message" style="display:none; margin-top: 20px; color: red;">
+        حدث خطأ أثناء إرسال سبب الرفض.
     </div>
 
     <script>
-        // جلب بيانات المستخدم وعرضها
-        async function fetchUserData() {
-            const email = new URLSearchParams(window.location.search).get('email'); // استرداد البريد من الرابط
-            try {
-                const response = await fetch(`/get-user/${email}`);
-                if (response.ok) {
-                    const userData = await response.json();
-                    document.getElementById('user-info').innerHTML = `
-                        <p>الاسم: ${userData.name}</p>
-                        <p>البريد الإلكتروني: ${userData.email}</p>
-                        <p>رقم الهاتف: ${userData.phone}</p>
-                        <p>الرقم الوطني: ${userData.id}</p>
-                    `;
-                } else {
-                    document.getElementById('user-info').innerHTML = 'لم يتم العثور على المستخدم.';
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        }
+        // معالجة إرسال النموذج
+        document.getElementById('reject-form').addEventListener('submit', function(e) {
+            e.preventDefault(); // منع إرسال النموذج بالطريقة التقليدية
 
-        // الموافقة على المستخدم
-        async function approveUser() {
-            const email = new URLSearchParams(window.location.search).get('email');
-            try {
-                const response = await fetch(`/approve-user/${email}`, { method: 'POST' });
-                const result = await response.json();
-                document.getElementById('message').textContent = result.message;
-            } catch (error) {
-                console.error('Error approving user:', error);
-            }
-        }
+            const reason = document.getElementById('reason').value; // أخذ سبب الرفض من المدخلات
 
-        // رفض المستخدم
-        async function rejectUser() {
-            const email = new URLSearchParams(window.location.search).get('email');
-            try {
-                const response = await fetch(`/reject-user/${email}`, { method: 'DELETE' });
-                const result = await response.json();
-                document.getElementById('message').textContent = result.message;
-            } catch (error) {
-                console.error('Error rejecting user:', error);
-            }
-        }
-
-        // استدعاء دالة استرجاع بيانات المستخدم عند تحميل الصفحة
-        window.onload = fetchUserData;
+            // إرسال الطلب باستخدام fetch
+            fetch('http://localhost:3000/reject-user/salem_alhrahsha@yahoo.com', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    reason: reason
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('تمت المعالجة:', data);
+                // إظهار رسالة التأكيد
+                document.getElementById('response-message').style.display = 'block';
+                // إخفاء رسالة الخطأ إن وجدت
+                document.getElementById('error-message').style.display = 'none';
+            })
+            .catch((error) => {
+                console.error('خطأ:', error);
+                // إظهار رسالة الخطأ
+                document.getElementById('error-message').style.display = 'block';
+                // إخفاء رسالة التأكيد إن وجدت
+                document.getElementById('response-message').style.display = 'none';
+            });
+        });
+       <script src="reject-user.js"></script> 
     </script>
 </body>
 </html>

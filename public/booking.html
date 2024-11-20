@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حجز الرحلات</title>
+    <style>
+        /* تصميم الجداول */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .button {
+            padding: 5px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .button:disabled {
+            background-color: #ccc;
+        }
+
+        /* تصميم النموذج للبحث */
+        .search-container {
+            margin: 20px 0;
+        }
+
+        .search-container input {
+            padding: 5px;
+            margin-right: 10px;
+        }
+
+        .search-container button {
+            padding: 5px 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>حجز الرحلات</h1>
+        </header>
+        
+        <!-- جدول الرحلات المتاحة -->
+        <section class="trip-list">
+            <h2>الرحلات المتاحة</h2>
+            <table id="trip-table">
+                <thead>
+                    <tr>
+                        <th>الموقع</th>
+                        <th>التوقيت</th>
+                        <th>السائق</th>
+                        <th>الحالة</th>
+                        <th>الإجراء</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- سيتم ملء هذا الجزء باستخدام JavaScript -->
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- تحميل Firebase عبر CDN -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+        import { getFirestore, collection, getDocs, doc, updateDoc, arrayUnion } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyChm1-oS5eWjWeKap2HjMBu435chtbCNhU",
+            authDomain: "kaddad-2.firebaseapp.com",
+            databaseURL: "https://kaddad-2-default-rtdb.firebaseio.com",
+            projectId: "kaddad-2",
+            storageBucket: "kaddad-2.firebasestorage.app",
+            messagingSenderId: "941546196207",
+            appId: "1:941546196207:web:5c4c44513c3eedf1eedf1a",
+            measurementId: "G-G9W8H9ZTF4"
+        };
+
+        // تهيئة Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // جلب بيانات الرحلات من Firestore
+        const getTrips = async () => {
+            try {
+                const tripsRef = collection(db, "trips");
+                const snapshot = await getDocs(tripsRef);
+                
+                snapshot.forEach(doc => {
+                    const trip = doc.data();
+                    const tripId = doc.id;
+                    displayTrip(trip, tripId);
+                });
+            } catch (error) {
+                console.error("خطأ في جلب الرحلات:", error);
+            }
+        };
+
+        // عرض الرحلات المتاحة في الجدول
+        const displayTrip = (trip, tripId) => {
+            const table = document.getElementById("trip-table").getElementsByTagName('tbody')[0];
+            const row = table.insertRow();
+        
+            row.innerHTML = `
+                <td>${trip.departureLocation} - ${trip.arrivalLocation}</td>
+                <td>${trip.departureTime}</td>
+                <td>${trip.driverName}</td>
+                <td>${trip.isBooked ? "محجوزة" : "متاحة"}</td>
+                <td>
+                    <button class="button" onclick="bookTrip('${tripId}', '${trip.departureLocation}', '${trip.arrivalLocation}', '${trip.departureTime}')"
+                    ${trip.isBooked ? "disabled" : ""}>حجز</button>
+                </td>
+            `;
+        };
+
+        // حجز الرحلة
+        const bookTrip = async (tripId, departureLocation, arrivalLocation, departureTime) => {
+            try {
+                // تحديث حالة الرحلة إلى "محجوزة"
+                const tripRef = doc(db, "trips", tripId);
+                await updateDoc(tripRef, { isBooked: true });
+
+                // إضافة الرحلة إلى سجل الضيف
+                const guestToken = localStorage.getItem('guestToken'); // يجب أن يكون لديك توكن الضيف محفوظًا
+                const guestRef = doc(db, "guests", guestToken);
+                await updateDoc(guestRef, {
+                    bookedTrips: arrayUnion({
+                        departureLocation,
+                        arrivalLocation,
+                        departureTime,
+                        tripId
+                    })
+                });
+
+                alert("تم حجز الرحلة بنجاح");
+                location.reload(); // إعادة تحميل الصفحة
+            } catch (error) {
+                console.error("خطأ في حجز الرحلة:", error);
+                alert("حدث خطأ أثناء الحجز");
+            }
+        };
+
+        // تحميل البيانات عند تحميل الصفحة
+        window.onload = () => {
+            getTrips();
+        };
+    </script>
+</body>
+</html>

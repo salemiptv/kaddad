@@ -1,0 +1,113 @@
+<div class="container">
+    <h2>إضافة رحلة جديدة</h2>
+    <form id="offer-trip-form">
+        <label for="departure-location">مكان الانطلاق:</label>
+        <select id="departure-location" required>
+            <option value="">اختر مدينة</option>
+            <option value="عمان">عمان</option>
+            <option value="الزرقاء">الزرقاء</option>
+            <option value="إربد">إربد</option>
+            <option value="المفرق">المفرق</option>
+            <option value="جرش">جرش</option>
+            <option value="عجلون">عجلون</option>
+            <option value="السلط">السلط</option>
+            <option value="الكرك">الكرك</option>
+            <option value="مادبا">مادبا</option>
+            <option value="معان">معان</option>
+            <option value="العقبة">العقبة</option>
+            <option value="الطفيلة">الطفيلة</option>
+        </select>
+
+        <label for="departure-points">نقاط الانطلاق:</label>
+        <select id="departure-points" required>
+            <option value="">اختر نقطة انطلاق</option>
+        </select>
+
+        <label for="arrival-location">مكان الوصول:</label>
+        <select id="arrival-location" required>
+            <option value="">اختر مدينة</option>
+            <option value="عمان">عمان</option>
+            <option value="الزرقاء">الزرقاء</option>
+            <option value="إربد">إربد</option>
+            <option value="المفرق">المفرق</option>
+            <option value="جرش">جرش</option>
+            <option value="عجلون">عجلون</option>
+            <option value="السلط">السلط</option>
+            <option value="الكرك">الكرك</option>
+            <option value="مادبا">مادبا</option>
+            <option value="معان">معان</option>
+            <option value="العقبة">العقبة</option>
+            <option value="الطفيلة">الطفيلة</option>
+        </select>
+
+        <label for="arrival-points">نقاط الوصول:</label>
+        <select id="arrival-points" required>
+            <option value="">اختر نقطة وصول</option>
+        </select>
+
+        <label for="departure-time">وقت الرحلة:</label>
+        <select id="departure-time" required>
+            <option value="">اختر الوقت</option>
+            <option value="فورا">فورا</option>
+            <option value="خلال ربع ساعة">خلال ربع ساعة</option>
+            <option value="خلال نصف ساعة">خلال نصف ساعة</option>
+            <option value="خلال ساعة">خلال ساعة</option>
+        </select>
+
+        <label for="trip-cost">تكلفة الرحلة:</label>
+        <input type="number" id="trip-cost" placeholder="أدخل تكلفة الرحلة" required>
+
+        <button type="submit">تقديم الرحلة</button>
+    </form>
+
+    <div>
+        <a href="index.html">العودة إلى الصفحة الرئيسية</a>
+    </div>
+    
+    <div>
+        <a href="settings.html">تعديل كلمة المرور أو رقم الهاتف</a>
+    </div>
+</div>
+
+<script>
+    const pointsData = {
+        عمان: ["جسر ماركا", "المحطة", "دوار الداخلية", "دوار المدينة الرياضية", "صويلح", "المدينة الطبية"],
+        الزرقاء: ["المجمع القديم والجديد", "خو", "الهاشمية", "جسر خو"],
+        إربد: ["مجمع الاغوار", "مجمع عمان", "الحصن", "مستشفى الملك عبدالله"],
+        المفرق: ["المجمع الغربي", "المجمع الشرقي", "جامعة ال البيت", "دوار الدبابة"],
+        جرش: ["دوار المنتزة", "دوار القيروان", "بوابة عمان"],
+        عجلون: ["عجلون"],
+        السلط: ["السلط"],
+        الكرك: ["الكرك"],
+        مادبا: ["جسر مادبا", "مادبا"],
+        معان: ["معان"],
+        العقبة: ["العقبة"],
+        الطفيلة: ["الطفيلة"]
+    };
+
+    // تحديث نقاط الانطلاق بناءً على اختيار المدينة
+    const departureLocationSelect = document.getElementById('departure-location');
+    const departurePointsSelect = document.getElementById('departure-points');
+    const arrivalLocationSelect = document.getElementById('arrival-location');
+    const arrivalPointsSelect = document.getElementById('arrival-points');
+
+    function updatePoints(selectElement, pointsSelect, city) {
+        pointsSelect.innerHTML = '<option value="">اختر نقطة</option>';
+        if (pointsData[city]) {
+            pointsData[city].forEach(point => {
+                const option = document.createElement('option');
+                option.value = point;
+                option.textContent = point;
+                pointsSelect.appendChild(option);
+            });
+        }
+    }
+
+    departureLocationSelect.addEventListener('change', () => {
+        updatePoints(departureLocationSelect, departurePointsSelect, departureLocationSelect.value);
+    });
+
+    arrivalLocationSelect.addEventListener('change', () => {
+        updatePoints(arrivalLocationSelect, arrivalPointsSelect, arrivalLocationSelect.value);
+    });
+</script>

@@ -1,179 +1,203 @@
 <!DOCTYPE html>
 <html lang="ar">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>صفحة المستخدم</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-content h2 {
+            text-align: center;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .modal-content button {
+            width: 100%;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .modal-content button:hover {
+            background-color: #0056b3;
+        }
+
+        #loadingMessage {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
 </head>
+
 <body>
-    <header>
-        <h1>مرحباً بك!</h1>
-        <p id="user-greeting">هذه صفحة المستخدم</p>
-    </header>
-
     <div class="container">
-        <h2>إضافة رحلة جديدة</h2>
-        <form id="offer-trip-form">
-            <!-- هنا تم إدراج النموذج كما هو -->
-            <label for="departure-location">مكان الانطلاق:</label>
-            <select id="departure-location" required>
-                <option value="">اختر مدينة</option>
-                <option value="عمان">عمان</option>
-                <option value="الزرقاء">الزرقاء</option>
-                <option value="إربد">إربد</option>
-                <option value="المفرق">المفرق</option>
-                <option value="جرش">جرش</option>
-                <option value="عجلون">عجلون</option>
-                <option value="السلط">السلط</option>
-                <option value="الكرك">الكرك</option>
-                <option value="مادبا">مادبا</option>
-                <option value="معان">معان</option>
-                <option value="العقبة">العقبة</option>
-                <option value="الطفيلة">الطفيلة</option>
-            </select>
+        <h1 id="welcome-message">أهلا بك في صفحة مقدم الخدمة</h1>
+        <button onclick="location.href='add-trip.html'">إضافة رحلة</button>
+        <button onclick="openChangePasswordModal()">تغيير كلمة المرور</button>
+    </div>
 
-            <label for="departure-points">نقاط الانطلاق:</label>
-            <select id="departure-points" required>
-                <option value="">اختر نقطة انطلاق</option>
-            </select>
-
-            <label for="arrival-location">مكان الوصول:</label>
-            <select id="arrival-location" required>
-                <option value="">اختر مدينة</option>
-                <option value="عمان">عمان</option>
-                <option value="الزرقاء">الزرقاء</option>
-                <option value="إربد">إربد</option>
-                <option value="المفرق">المفرق</option>
-                <option value="جرش">جرش</option>
-                <option value="عجلون">عجلون</option>
-                <option value="السلط">السلط</option>
-                <option value="الكرك">الكرك</option>
-                <option value="مادبا">مادبا</option>
-                <option value="معان">معان</option>
-                <option value="العقبة">العقبة</option>
-                <option value="الطفيلة">الطفيلة</option>
-            </select>
-
-            <label for="arrival-points">نقاط الوصول:</label>
-            <select id="arrival-points" required>
-                <option value="">اختر نقطة وصول</option>
-            </select>
-
-            <label for="departure-time">وقت الرحلة:</label>
-            <select id="departure-time" required>
-                <option value="">اختر الوقت</option>
-                <option value="فورا">فورا</option>
-                <option value="خلال ربع ساعة">خلال ربع ساعة</option>
-                <option value="خلال نصف ساعة">خلال نصف ساعة</option>
-                <option value="خلال ساعة">خلال ساعة</option>
-            </select>
-
-            <label for="trip-cost">تكلفة الرحلة:</label>
-            <input type="number" id="trip-cost" placeholder="أدخل تكلفة الرحلة" required>
-
-            <button type="submit">تقديم الرحلة</button>
-        </form>
-
-        <div>
-            <a href="index.html">العودة إلى الصفحة الرئيسية</a>
-        </div>
-        
-        <div>
-            <a href="settings.html">تعديل كلمة المرور أو رقم الهاتف</a>
+    <!-- Modal لتغيير كلمة المرور -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <h2>تغيير كلمة المرور</h2>
+            <input type="password" id="oldPassword" placeholder="كلمة المرور القديمة">
+            <input type="password" id="newPassword" placeholder="كلمة المرور الجديدة">
+            <input type="password" id="confirmPassword" placeholder="إعادة كلمة المرور الجديدة">
+            <button onclick="changePassword()">تغيير كلمة المرور</button>
+            <button onclick="closeChangePasswordModal()">إغلاق</button>
         </div>
     </div>
 
-    <script>
-        const pointsData = {
-            عمان: ["جسر ماركا", "المحطة", "دوار الداخلية", "دوار المدينة الرياضية", "صويلح", "المدينة الطبية"],
-            الزرقاء: ["المجمع القديم والجديد", "خو", "الهاشمية", "جسر خو"],
-            إربد: ["مجمع الاغوار", "مجمع عمان", "الحصن", "مستشفى الملك عبدالله"],
-            المفرق: ["المجمع الغربي", "المجمع الشرقي", "جامعة ال البيت", "دوار الدبابة"],
-            جرش: ["دوار المنتزة", "دوار القيروان", "بوابة عمان"],
-            عجلون: ["عجلون"],
-            السلط: ["السلط"],
-            الكرك: ["الكرك"],
-            مادبا: ["جسر مادبا", "مادبا"],
-            معان: ["معان"],
-            العقبة: ["العقبة"],
-            الطفيلة: ["الطفيلة"]
-        };
+    <!-- رسالة التحميل -->
+    <div id="loadingMessage">جاري تغيير كلمة المرور...</div>
 
-        function updatePoints(city, pointsSelect) {
-            pointsSelect.innerHTML = '<option value="">اختر نقطة</option>'; // إعادة تعيين النقاط
-            if (pointsData[city]) {
-                pointsData[city].forEach(point => {
-                    const option = document.createElement('option');
-                    option.value = point;
-                    option.textContent = point;
-                    pointsSelect.appendChild(option);
-                });
+    <script>
+        // استدعاء اسم السائق من التخزين المحلي وتغيير الرسالة الترحيبية
+        window.addEventListener('load', () => {
+            const driverId = localStorage.getItem('driverId');
+            if (!driverId) {
+                window.location.href = 'login-provider.html'; // إذا لم يتم العثور على السائق، إعادة التوجيه إلى صفحة تسجيل الدخول
+            } else {
+                const driverName = localStorage.getItem('driverName') || 'السائق'; // اسم السائق
+                document.getElementById('welcome-message').textContent = `أهلا يا ${driverName}`; // تغيير رسالة الترحيب
             }
+        });
+
+        // فتح مربع الحوار لتغيير كلمة المرور
+        function openChangePasswordModal() {
+            document.getElementById('changePasswordModal').style.display = 'flex';
         }
 
-        document.getElementById('departure-location').addEventListener('change', function() {
-            const city = this.value;
-            updatePoints(city, document.getElementById('departure-points'));
-        });
+        // إغلاق مربع الحوار لتغيير كلمة المرور
+        function closeChangePasswordModal() {
+            document.getElementById('changePasswordModal').style.display = 'none';
+        }
 
-        document.getElementById('arrival-location').addEventListener('change', function() {
-            const city = this.value;
-            updatePoints(city, document.getElementById('arrival-points'));
-        });
+        // تغيير كلمة المرور
+        function changePassword() {
+            const oldPassword = document.getElementById('oldPassword').value.trim();
+            const newPassword = document.getElementById('newPassword').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
 
-        // ملء نقاط الانطلاق والأوجه الأولى بشكل افتراضي
-        updatePoints('عمان', document.getElementById('departure-points'));
-        updatePoints('عمان', document.getElementById('arrival-points'));
-
-        // إضافة حدث لتقديم النموذج
-        document.getElementById('offer-trip-form').addEventListener('submit', async function(event) {
-            event.preventDefault(); // منع إعادة تحميل الصفحة
-
-            const departureLocation = document.getElementById('departure-location').value;
-            const departurePoints = document.getElementById('departure-points').value;
-            const arrivalLocation = document.getElementById('arrival-location').value;
-            const arrivalPoints = document.getElementById('arrival-points').value;
-            const departureTime = document.getElementById('departure-time').value;
-            const tripCost = document.getElementById('trip-cost').value;
-
-            const tripData = {
-                departure: departureLocation,
-                departurePoint: departurePoints,
-                arrival: arrivalLocation,
-                arrivalPoint: arrivalPoints,
-                time: departureTime,
-                cost: tripCost
-            };
-
-            // تأكد من أن التوكن موجود
-            const token = localStorage.getItem('token'); // تأكد من أنك تخزن التوكن في localStorage بعد تسجيل الدخول
-            if (!token) {
-                alert('يرجى تسجيل الدخول أولا.'); // إظهار رسالة تحذيرية
-                return; // الخروج من الدالة إذا لم يكن هناك توكن
+            // تأكد من أن جميع الحقول تحتوي على قيم
+            if (!oldPassword || !newPassword || !confirmPassword) {
+                alert("جميع الحقول مطلوبة.");
+                return;
             }
 
-            try {
-                const response = await fetch('/add-trip', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}` // إرسال التوكن في الهيدر
-                    },
-                    body: JSON.stringify(tripData)
-                });
+            // تحقق من تطابق كلمة المرور الجديدة مع تأكيد كلمة المرور
+            if (newPassword !== confirmPassword) {
+                alert("كلمة المرور الجديدة غير متطابقة.");
+                return;
+            }
 
-                const result = await response.json(); // تأكد من تعريف result هنا
+            const driverId = localStorage.getItem('driverId'); // تأكد من أن ID السائق موجود في localStorage
+            if (!driverId) {
+                alert("لم يتم العثور على السائق، يرجى تسجيل الدخول.");
+                return;
+            }
 
-                if (response.ok) {
-                    alert(result.message); // إظهار رسالة نجاح
+            // إرسال البيانات إلى الـ API
+            fetch('http://localhost:3000/change-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    oldPassword,
+                    newPassword,
+                    confirmPassword,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("تم تغيير كلمة المرور بنجاح.");
+                    closeChangePasswordModal();
                 } else {
-                    alert(`فشل في إضافة الرحلة: ${result.message}`); // إظهار رسالة خطأ
+                    alert("فشل في تغيير كلمة المرور: " + data.message);
                 }
-            } catch (error) {
-                alert(`حدث خطأ: ${error.message}`); // إظهار رسالة خطأ في حالة فشل الاتصال
-            }
-        });
+            })
+            .catch(error => {
+                console.error('حدث خطأ أثناء تغيير كلمة المرور:', error);
+                alert("حدث خطأ أثناء تغيير كلمة المرور.");
+            });
+        }
     </script>
 </body>
+
 </html>
