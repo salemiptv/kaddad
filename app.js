@@ -17,7 +17,7 @@ const functions = require("firebase-functions");
 
 
 // تهيئة Firebase Admin SDK باستخدام بيانات الخدمة
-const serviceAccount = require('./config/kaddad-2-firebase-adminsdk-wur0x-bcd92ff991.json');
+const serviceAccount = require('./config/kaddad-2-firebase-adminsdk-wur0x-0d64532cef.json');
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   projectId: 'kaddad-2', // تأكد من وضع معرّف المشروع الصحيح

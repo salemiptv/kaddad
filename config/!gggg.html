@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الضيوف</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .logo {
+            margin-bottom: 20px;  /* إضافة مسافة أسفل الشعار */
+            text-align: center;
+        }
+        .logo img {
+            width: 120px;  /* تغيير الحجم حسب الحاجة */
+            height: auto;
+        }
+        .program-name {
+            font-size: 36px;  /* تكبير حجم الخط */
+            font-weight: bold;
+            color: #333;
+            margin-top: 10px;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: right;
+        }
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .form-group input {
+            width: 90%;  /* تقليل العرض إلى 90% من الحاوية */
+            padding: 8px;  /* تقليل المسافة الداخلية للحقل */
+            font-size: 12px;  /* تقليل حجم الخط */
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .message {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .login-provider-btn {
+            background-color: #008CBA;  /* لون أزرق */
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .login-provider-btn:hover {
+            background-color: #007BB5;
+        }
+    </style>
+</head>
+<body>
+    <!-- الشعار -->
+    <div class="logo">
+        <img src="path/to/your/logo.png" alt="شعار البرنامج">
+        <div class="program-name">Kaddad</div>  <!-- إضافة اسم البرنامج هنا -->
+    </div>
+
+    <div class="container">
+        <h1>تسجيل الضيوف</h1>
+        <form id="guestForm">
+            <div class="form-group">
+                <label for="fullName">الاسم الكامل:</label>
+                <input type="text" id="fullName" name="fullName" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">رقم الهاتف:</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            <button type="submit" class="btn">تسجيل</button>
+            <div class="message" id="message"></div>
+        </form>
+
+        <!-- زر الدخول كمقدم خدمة -->
+        <a href="login-provider.html">
+            <button class="login-provider-btn">الدخول كمقدم خدمة</button>
+        </a>
+    </div>
+    
+    <script>
+        // التعامل مع إرسال النموذج
+        document.getElementById('guestForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // منع إعادة تحميل الصفحة
+
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phone').value;
+
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = ''; // مسح الرسالة السابقة
+
+            try {
+                const response = await fetch('/guests-register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ fullName, phone }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    messageEl.style.color = 'green';
+                    messageEl.textContent = 'تم التسجيل بنجاح!';
+                } else {
+                    messageEl.style.color = 'red';
+                    messageEl.textContent = result.message || 'حدث خطأ أثناء التسجيل.';
+                }
+            } catch (error) {
+                messageEl.style.color = 'red';
+                messageEl.textContent = 'تعذر الاتصال بالخادم.';
+                console.error('خطأ:', error);
+            }
+        });
+    </script>
+</body>
+</html>
